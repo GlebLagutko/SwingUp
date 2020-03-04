@@ -1,16 +1,16 @@
 import javax.swing.*;
+import java.io.File;
 import java.io.FilenameFilter;
+import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 class MyPanel extends JFrame {
@@ -33,7 +33,7 @@ class MyPanel extends JFrame {
     private List<Path> paths;
     private JFileChooser chooser = new JFileChooser();
     private Task1 firstPanel;
-    private Map<String, String> stringStringMap = new TreeMap<>();
+    private Map<String, String> stringStringMap;
 
     @Override
     public JRootPane createRootPane() {
@@ -50,10 +50,17 @@ class MyPanel extends JFrame {
         menuBar.add(submenu);
         JMenuItem open = new JMenuItem("Open");
         submenu.add(open);
-
+        stringStringMap = new TreeMap<>();
+        try (Scanner sc = new Scanner(new File("src\\main\\java\\input.txt"))) {
+            while (sc.hasNext()){
+                stringStringMap.put(sc.next(),sc.next());
+            }
+        } catch (Exception ex) {
+         ex.printStackTrace();
+        }
 
         open.addActionListener(e -> {
-            try {
+            try (PrintWriter pr = new PrintWriter(new File("output.txt"))) {
                 chooser = new JFileChooser();
                 chooser.setDialogTitle("Октрытие файла");
                 chooser.setCurrentDirectory(new java.io.File("."));
@@ -64,6 +71,9 @@ class MyPanel extends JFrame {
                             .filter(Files::isRegularFile)
                             .collect(Collectors.toList()).stream().filter(f -> f.toString().endsWith("png")).collect(Collectors.toList()));
                     fillCountries();
+                    for (Country country : countries) {
+                        pr.println(country.getName());
+                    }
                     firstPanel.update();
                 }
             } catch (IOException er) {
@@ -80,7 +90,11 @@ class MyPanel extends JFrame {
 
     private void fillCountries() {
         for (Path path : paths) {
-            countries.add(new Country(path));
+            Country country = new Country(path);
+            if(stringStringMap.get(country.getName())!= null){
+                country.setCapital(stringStringMap.get(country.getName()));
+            }
+            countries.add(country);
         }
     }
 

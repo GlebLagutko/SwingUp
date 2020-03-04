@@ -21,9 +21,9 @@ public class Task1 extends JPanel {
         JScrollPane scrollPane = new JScrollPane();
         // list.setCellRenderer(new MyLabel());
         list.setBounds(100, 100, 75, 75);
-        list.addListSelectionListener(e -> {
-            String str = list.getSelectedValue().getName();
-            JOptionPane.showMessageDialog(this, "Capital of " + str);
+        list.addListSelectionListener(e->{
+            String str = list.getSelectedValue().getCapital();
+            JOptionPane.showMessageDialog(this,str);
         });
 
         scrollPane.setViewportView(list);
