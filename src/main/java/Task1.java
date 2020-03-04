@@ -21,17 +21,11 @@ public class Task1 extends JPanel {
         JScrollPane scrollPane = new JScrollPane();
         // list.setCellRenderer(new MyLabel());
         list.setBounds(100, 100, 75, 75);
-        list.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                if (!evt.getValueIsAdjusting()) { // Игнорируем событие mouseDown
-                    // Получаем выбранное значение
-                    String val = list.getSelectedValue().toString();
-                    // Устанавливаем полученное значение в текстовое поле
-
-                }
-            }
+        list.addListSelectionListener(e -> {
+            String str = list.getSelectedValue().getName();
+            JOptionPane.showMessageDialog(this, "Capital of " + str);
         });
+
         scrollPane.setViewportView(list);
         scrollPane.setPreferredSize(new Dimension(250, 400));
         this.add(scrollPane);
