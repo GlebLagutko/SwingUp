@@ -9,8 +9,7 @@ class MyLabel implements ListCellRenderer<Country>{
             boolean isSelected, boolean cellHasFocus) {
         Icon iconFlag = value.getFlag();
         String name = value.getName();
-        String capital = value.getCapital();
-        JLabel label = new JLabel(name + " " + capital, iconFlag, JLabel.LEFT);
+        JLabel label = new JLabel(name , iconFlag, JLabel.LEFT);
         return label;
     }
 }

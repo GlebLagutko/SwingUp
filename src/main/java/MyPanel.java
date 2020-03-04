@@ -63,9 +63,7 @@ class MyPanel extends JFrame {
                     paths.addAll(Files.walk(Paths.get(""))
                             .filter(Files::isRegularFile)
                             .collect(Collectors.toList()).stream().filter(f -> f.toString().endsWith("png")).collect(Collectors.toList()));
-                    for (Path path : paths) {
-                        countries.add(new Country(path));
-                    }
+                    fillCountries();
                     firstPanel.update();
                 }
             } catch (IOException er) {
@@ -78,6 +76,12 @@ class MyPanel extends JFrame {
         pane.setContentPane(panel);
 
         return pane;
+    }
+
+    private void fillCountries() {
+        for (Path path : paths) {
+            countries.add(new Country(path));
+        }
     }
 
 }
