@@ -12,7 +12,8 @@ public class Country {
     private final int CONST2 = 23;
 
     public Country(String name) {
-        this.name = name;
+        this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        this.capital = "Capital of " + name;
     }
 
     public Country(Path filePath) {

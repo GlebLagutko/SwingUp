@@ -74,9 +74,15 @@ public class SecondTab extends JPanel {
         addButton.addActionListener(e -> {
             try {
                 int priceField = Integer.valueOf(price.getText());
-                Country cntr = new Country(country.getText());
-                Object[] obj = new Object[]{cntr.getFlag(), description.getText(), priceField, false};
-                tableModel.insertRow(tableModel.getRowCount(), obj);
+                String countryName = country.getText();
+                if (countries.stream().anyMatch(c -> c.getName().equals(countryName))) {
+                    JOptionPane.showMessageDialog(this, "Already exists");
+                } else {
+                    Country cntr = new Country(countryName);
+                    countries.add(cntr);
+                    Object[] obj = new Object[]{cntr.getFlag(), description.getText(), priceField, false};
+                    tableModel.insertRow(tableModel.getRowCount(), obj);
+                }
             } catch (NumberFormatException exc) {
                 JOptionPane.showMessageDialog(null, exc.getMessage());
             }
