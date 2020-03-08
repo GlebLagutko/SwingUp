@@ -1,15 +1,15 @@
 import javax.swing.*;
-import java.io.File;
-import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class MyPanel extends JFrame {
