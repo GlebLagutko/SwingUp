@@ -8,6 +8,12 @@ public class Country {
     private String name;
     private String capital;
     private ImageIcon flag;
+    private final int CONST1 = 18;
+    private final int CONST2 = 23;
+
+    public Country(String name) {
+        this.name = name;
+    }
 
     public Country(Path filePath) {
         flag = new ImageIcon(filePath.toString());
@@ -17,9 +23,14 @@ public class Country {
         if (matcher.find()) {
             name = matcher.group(0).substring(0, matcher.group(0).length() - 1);
         }
-        name = name.substring(0,1).toUpperCase() + name.substring(1);
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
         capital = "Capital of " + name;
     }
+
+    public int calcPrice() {
+        return capital.length() * CONST1 + name.length() * CONST2;
+    }
+
 
     public String getName() {
         return name;

@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.*;
@@ -32,7 +31,8 @@ class MyPanel extends JFrame {
     private List<Country> countries;
     private List<Path> paths;
     private JFileChooser chooser = new JFileChooser();
-    private Task1 firstPanel;
+    private SecondTab secondTask;
+    private FirstTab firstPanel;
     private Map<String, String> stringStringMap;
 
     @Override
@@ -40,30 +40,40 @@ class MyPanel extends JFrame {
         JRootPane pane = new JRootPane();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        JMenuBar menuBar = new JMenuBar();
-        JTabbedPane tabbedPane = new JTabbedPane();
+
         countries = new ArrayList<>();
         paths = new ArrayList<>();
-        firstPanel = new Task1(countries);
-        tabbedPane.addTab("Task1", firstPanel);
-        JMenu submenu = new JMenu("File");
-        menuBar.add(submenu);
-        JMenuItem open = new JMenuItem("Open");
-        submenu.add(open);
-        stringStringMap = new TreeMap<>();
-        try (Scanner sc = new Scanner(new File("src\\main\\java\\input.txt"))) {
-            while (sc.hasNext()){
-                stringStringMap.put(sc.next(),sc.next());
-            }
-        } catch (Exception ex) {
-         ex.printStackTrace();
-        }
 
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+        firstPanel = new FirstTab(countries);
+        secondTask =  new SecondTab(countries);
+        tabbedPane.addTab("FirstTab", firstPanel);
+        tabbedPane.addTab("SecondTab", secondTask);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu submenu = new JMenu("File");
+        JMenuItem open = createOpenButton();
+        menuBar.add(submenu);
+        submenu.add(open);
+
+        initialMap();
+
+
+        panel.add(menuBar, BorderLayout.NORTH);
+        panel.add(tabbedPane, BorderLayout.CENTER);
+        pane.setContentPane(panel);
+
+        return pane;
+    }
+
+    private JMenuItem createOpenButton() {
+        JMenuItem open = new JMenuItem("Open");
         open.addActionListener(e -> {
             try (PrintWriter pr = new PrintWriter(new File("output.txt"))) {
                 chooser = new JFileChooser();
                 chooser.setDialogTitle("Октрытие файла");
-                chooser.setCurrentDirectory(new java.io.File("."));
+                chooser.setCurrentDirectory(new File("."));
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -74,18 +84,25 @@ class MyPanel extends JFrame {
                     for (Country country : countries) {
                         pr.println(country.getName());
                     }
+                    secondTask.update();
                     firstPanel.update();
                 }
             } catch (IOException er) {
                 er.printStackTrace();
             }
         });
+        return open;
+    }
 
-        panel.add(menuBar, BorderLayout.NORTH);
-        panel.add(tabbedPane, BorderLayout.CENTER);
-        pane.setContentPane(panel);
-
-        return pane;
+    private void initialMap() {
+        stringStringMap = new TreeMap<>();
+        try (Scanner sc = new Scanner(new File("src\\main\\java\\input.txt"))) {
+            while (sc.hasNext()){
+                stringStringMap.put(sc.next(),sc.next());
+            }
+        } catch (Exception ex) {
+         ex.printStackTrace();
+        }
     }
 
     private void fillCountries() {
