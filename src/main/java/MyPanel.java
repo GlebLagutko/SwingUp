@@ -43,28 +43,32 @@ class MyPanel extends JFrame {
 
         countries = new ArrayList<>();
         paths = new ArrayList<>();
-
-
-        JTabbedPane tabbedPane = new JTabbedPane();
-        firstPanel = new FirstTab(countries);
-        secondTask =  new SecondTab(countries);
-        tabbedPane.addTab("FirstTab", firstPanel);
-        tabbedPane.addTab("SecondTab", secondTask);
-
-        JMenuBar menuBar = new JMenuBar();
-        JMenu submenu = new JMenu("File");
-        JMenuItem open = createOpenButton();
-        menuBar.add(submenu);
-        submenu.add(open);
-
+        JTabbedPane tabbedPane = createTabbedPane();
+        JMenuBar menuBar = createMenuBar();
         initialMap();
-
-
         panel.add(menuBar, BorderLayout.NORTH);
         panel.add(tabbedPane, BorderLayout.CENTER);
         pane.setContentPane(panel);
 
         return pane;
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu submenu = new JMenu("File");
+        JMenuItem open = createOpenButton();
+        menuBar.add(submenu);
+        submenu.add(open);
+        return menuBar;
+    }
+
+    private JTabbedPane createTabbedPane() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        firstPanel = new FirstTab(countries);
+        secondTask = new SecondTab(countries);
+        tabbedPane.addTab("FirstTab", firstPanel);
+        tabbedPane.addTab("SecondTab", secondTask);
+        return tabbedPane;
     }
 
     private JMenuItem createOpenButton() {
@@ -77,9 +81,7 @@ class MyPanel extends JFrame {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    paths.addAll(Files.walk(Paths.get(""))
-                            .filter(Files::isRegularFile)
-                            .collect(Collectors.toList()).stream().filter(f -> f.toString().endsWith("png")).collect(Collectors.toList()));
+                    fillPaths();
                     fillCountries();
                     for (Country country : countries) {
                         pr.println(country.getName());
@@ -94,21 +96,27 @@ class MyPanel extends JFrame {
         return open;
     }
 
+    private void fillPaths() throws IOException {
+        paths.addAll(Files.walk(Paths.get(""))
+                .filter(Files::isRegularFile)
+                .collect(Collectors.toList()).stream().filter(f -> f.toString().endsWith("png")).collect(Collectors.toList()));
+    }
+
     private void initialMap() {
         stringStringMap = new TreeMap<>();
         try (Scanner sc = new Scanner(new File("src\\main\\java\\input.txt"))) {
-            while (sc.hasNext()){
-                stringStringMap.put(sc.next(),sc.next());
+            while (sc.hasNext()) {
+                stringStringMap.put(sc.next(), sc.next());
             }
         } catch (Exception ex) {
-         ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
     private void fillCountries() {
         for (Path path : paths) {
             Country country = new Country(path);
-            if(stringStringMap.get(country.getName())!= null){
+            if (stringStringMap.get(country.getName()) != null) {
                 country.setCapital(stringStringMap.get(country.getName()));
             }
             countries.add(country);
