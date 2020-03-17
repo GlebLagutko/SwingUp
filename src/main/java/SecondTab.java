@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,8 +53,23 @@ public class SecondTab extends JPanel {
             }
         };
 
+
+        tableModel.addTableModelListener(e -> {
+                    if (!selected) {
+                        int sum = 0;
+                        for (int i = 1; i < tableModel.getRowCount(); i++) {
+                            if ((boolean) tableModel.getValueAt(i, 3)) {
+                                sum += (int) tableModel.getValueAt(i, 2);
+                            }
+                        }
+                        selected = true;
+                        tableModel.setValueAt(sum, 0, 2);
+                        selected = false;
+                    }
+                }
+        );
         tableModel.addRow(new Object[]{new ImageIcon(), "Summa : ", 0, false});
-        table.setRowHeight(80);
+
         table.setModel(tableModel);
         //  this.add(table);
         this.setSize(new Dimension(600, 600));

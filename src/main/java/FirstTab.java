@@ -4,7 +4,6 @@ import java.util.List;
 
 public class FirstTab extends JPanel {
 
-
     private JList<Country> list;
     private DefaultListModel<Country> listModel;
     private List<Country> countries;
@@ -14,18 +13,16 @@ public class FirstTab extends JPanel {
         this.countries = countries;
         listModel = new DefaultListModel<>();
         list = new JList<>(listModel);
-        list.setCellRenderer(new MyLabel());
-        JScrollPane scrollPane = new JScrollPane();
-        // list.setCellRenderer(new MyLabel());
+        list.setCellRenderer(new MyRender());
+        JScrollPane scrollPane = new JScrollPane(list);
+        // list.setCellRenderer(new MyRender());
         list.setBounds(100, 100, 75, 75);
         list.addListSelectionListener(e -> {
             Country country = list.getSelectedValue();
             label.setIcon(country.getFlag());
             label.setText(country.getName() + " " + country.getCapital());
-           // JOptionPane.showMessageDialog(this, str);
         });
 
-        scrollPane.setViewportView(list);
         scrollPane.setPreferredSize(new Dimension(250, 400));
 
         this.add(scrollPane);

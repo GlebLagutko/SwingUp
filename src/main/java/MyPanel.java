@@ -81,7 +81,7 @@ class MyPanel extends JFrame {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    fillPaths();
+                    fillPaths(chooser.getSelectedFile().getPath());
                     fillCountries();
                     for (Country country : countries) {
                         pr.println(country.getName());
@@ -90,14 +90,14 @@ class MyPanel extends JFrame {
                     firstPanel.update();
                 }
             } catch (IOException er) {
-                er.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error");
             }
         });
         return open;
     }
 
-    private void fillPaths() throws IOException {
-        paths.addAll(Files.walk(Paths.get(""))
+    private void fillPaths(String path) throws IOException {
+        paths.addAll(Files.walk(Paths.get(path))
                 .filter(Files::isRegularFile)
                 .collect(Collectors.toList()).stream().filter(f -> f.toString().endsWith("png")).collect(Collectors.toList()));
     }

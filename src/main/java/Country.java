@@ -23,6 +23,7 @@ public class Country {
         if (matcher.find()) {
             name = matcher.group(0).substring(0, matcher.group(0).length() - 1);
         }
+        assert name != null;
         name = name.substring(0, 1).toUpperCase() + name.substring(1);
         capital = "Capital of " + name;
     }
